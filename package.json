@@ -1,0 +1,18 @@
+{
+  "name": "twitter",
+  "version": "1.0.0",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": {},
+  "dependencies": {
+    "body-parser": "*",
+    "ejs": "^3.1.8",
+    "express": "*",
+    "morgan": "^1.10.0",
+    "neo4j-driver": "*"
+  }
+}
