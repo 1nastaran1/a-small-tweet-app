@@ -1,35 +1,232 @@
-<h1> username</h1>
-<p> <%=  user.name  %> </p>
-<h1> bio </h1>
-<p> <%=  user.bio  %> </p>
-<h1> email </h1>
-<p> <%=  user.email  %> </p>
-<h1> phone number</h1>
-<p> <%=  user.phone  %> </p>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>User Profile</title>
+    <style>
+        body {
+            background-color: #f5f8fa;
+            font-family: Arial, sans-serif;
+        }
 
-<form method="post" action="/followers">
-    <input type="hidden" name="username" value = <%=  user.name  %> />
-    <input type="submit" value="Followers">
-</form>
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 4px;
+        }
 
-<form method="post" action="/followings">
-    <input type="hidden" name="username" value = <%=  user.name  %> />
-    <input type="submit" value="Followings">
-</form>
+        h1 {
+            color: #1da1f2;
+            margin-bottom: 10px;
+            font-size: 25px;
+        }
 
-<h1>Tweets</h1>
-<ul>
-<% tweets.forEach(function(tweet){ %>
-    <li> 
-        <h3><%= user.name %> </h3>
-        <p> <%= tweet.text %> </p>
-    </li>
-   
-<% }) %>
-</ul>
-<form method="post" action="/create-tweet">
-    <label>Add New Tweet</label>
-    <input type="text" name="tweet" >
-    <input type="hidden"  name="username" value= <%=  user.name  %> />
-    <input type="submit" value="submit">
-</form>
+         h2 {
+            color: #000000;
+            font-size: 15px;
+            margin-left: 10px;
+            margin-top: 20px;
+        }
+
+        p {
+            margin-top: 0;
+            color: #333;
+            font-style: oblique;
+        }
+
+        ul {
+            padding: 0;
+            list-style: none;
+        }
+
+        li {
+            margin-bottom: 20px;
+            padding: 10px;
+            background-color: #f5f8fa;
+            border-radius: 4px;
+        }
+
+        li h3 {
+            margin-top: 0;
+            color: #1da1f2;
+        }
+
+        li p {
+            margin: 0;
+            color: #333;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #555;
+        }
+
+        input[type="submit"],
+        .button{
+            padding: 10px;
+            border-radius: 4px;
+            border: none;
+            background-color: #1da1f2;
+            color: #fff;
+            font-size: 16px;
+            cursor: pointer;
+            margin-right: 10px;
+            width: 100%;
+            
+        }
+
+        input[type="submit"]:hover,
+        .button:hover {
+            background-color: #0c87b8;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+         .info-container {
+            box-shadow:#aee8ff;
+            display: flex;
+            margin-top: 20px;
+            justify-content:space-between;
+            text-size-adjust: 20px;
+        }
+
+        .blue-line {
+        border-bottom: 2px solid #1da1f2;
+        width: 100%;
+        height: 1px;
+        margin-bottom: 10px;
+        margin-top: 20px; 
+        }
+        .blue-lines{
+        border-bottom: 2px solid #1da1f2;
+        width: 100%;
+        height: 1px;
+        margin-top: 20px;  
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+
+        <div class="button-container">
+
+            <form class="button" id="userForm" action="/users" method="POST">
+                <input type="hidden" id="usernameInput" name="username">
+                <button class="button" type="submit">Users</button>
+              </form>
+
+              <form class="button" id="tweetsForm" action="/tweets" method="POST">
+                <input type="hidden" id="tweetUsernameInput" name="username">
+                <button class="button" type="submit">Home</button>
+              </form>
+
+              <form class="button" id="followersForm" action="/followers" method="POST">
+                <input type="hidden" id="followerInput" name="username">
+                <button class="button" type="submit">Followers</button>
+              </form>
+
+              <form class="button" id="followingsForm" action="/followings" method="POST">
+                <input type="hidden" id="followingsInput" name="username">
+                <button class="button" type="submit">Followings</button>
+              </form>
+
+            </div>
+
+                <div class="blue-lines"></div>
+        <div class="info-container">
+                <div class="info-container">
+                <h1>Username</h1>
+                <h2><%= user.name %></h2>
+                </div>
+                <div class="info-container">
+                <h1>Bio</h1>
+                <h2><%= user.bio %></h2>
+                </div>
+        </div>
+
+        <div class="info-container">
+                <div class="info-container">
+                <h1>Email</h1>
+                <h2><%= user.email %></h2>
+                </div>
+                <div class="info-container">
+                <h1>Phone Number</h1>
+                <h2><%= user.phone %></h2>
+                </div>
+        </div>
+
+
+
+        <div class="blue-line"></div>
+        <h1>Tweets</h1>
+        <ul>
+            <% tweets.forEach(function(tweet){ %>
+                <li>
+                    <h3><%= user.name %></h3>
+                    <p><%= tweet.text %></p>
+                </li>
+            <% }) %>
+        </ul>
+
+        <form method="post" action="/create-tweet">
+            <label>Add New Tweet</label>
+            <input type="text" name="tweet">
+            <input type="hidden" name="username" value="<%= user.name %>">
+            <div class="button-container">
+                <input type="submit" value="Submit">
+            </div>
+        </form>
+
+        
+    </div>
+</body>
+<script>
+        // document.getElementById('userForm').addEventListener('submit', function(event) {
+        //   event.preventDefault(); // Prevent the default form submission
+      
+        //   var xhr = new XMLHttpRequest();
+        //   xhr.open('GET', '/get-username', true);
+        //   xhr.onreadystatechange = function() {
+        //     if (xhr.readyState === 4 && xhr.status === 200) {
+        //       var username = xhr.responseText;
+        //       if (username) {
+        //         document.getElementById('usernameInput').value = username;
+        //         document.getElementById('userForm').submit(); // Submit the form
+        //       }
+        //     }
+        //   };
+        //   xhr.send();
+        // });
+
+        // document.getElementById('tweetsForm').addEventListener('submit', function(event) {
+        //   event.preventDefault(); // Prevent the default form submission
+      
+        //   var xhrr = new XMLHttpRequest();
+        //   xhrr.open('GET', '/get_tweets', true);
+        //   xhrr.onreadystatechange = function() {
+        //     if (xhrr.readyState === 4 && xhrr.status === 200) {
+        //       var username2 = xhrr.responseText;
+        //       if (username2) {
+        //         document.getElementById('tweetUsernameInput').value = username2;
+        //         document.getElementById('tweetsForm').submit(); // Submit the form
+        //       }
+        //     }
+        //   };
+        //   xhrr.send();
+        // });
+      </script>
+</html>

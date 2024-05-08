@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>All Tweets</title>
+    <style>
+        body {
+            background-color: #f5f8fa;
+            font-family: Arial, sans-serif;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 4px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #1da1f2;
+            margin-bottom: 20px;
+        }
+
+        .tweet {
+            
+            color: #fff;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 4px;
+            border-color: #1da1f2;
+            border-style:solid;
+        }
+
+        .user {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .user img {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+
+        .user strong {
+            font-size: 18px;
+            color: #333;
+        }
+
+        .user span {
+            font-size: 16px;
+            color: #888;
+        }
+
+        .content {
+            font-size: 16px;
+            color: #333;
+            margin-top: 10px;
+        }
+
+        .content p {
+            margin: 0;
+        }
+
+        .content a {
+            color: #1da1f2;
+            text-decoration: none;
+        }
+
+        .content a:hover {
+            text-decoration: underline;
+        }
+
+        .content .hashtags {
+            color: #1da1f2;
+            font-weight: bold;
+        }
+
+        .content .mentions {
+            color: #1da1f2;
+            font-weight: bold;
+        }
+
+        .content .media {
+            margin-top: 10px;
+        }
+
+        .content .media img {
+            width: 100%;
+            border-radius: 4px;
+        }
+
+        .like-button {
+            display: inline-block;
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+            outline: none;
+            padding: 0;
+            margin-left: 10px;
+        }
+
+        .like-button img {
+            width: 20px;
+            height: 20px;
+        }
+
+        .heart-icon {
+            font-size: 24px; /* Adjust the size as needed */
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>All Tweets</h1>
+
+        <div id="tweetList">
+            <% if (data && data.length) { %>
+                <% data.forEach(function(item) { %>
+                    <div class="tweet">
+                        <div class="user">
+                            <img src="<%= item.user.avatar %>" alt="Profile Picture">
+                            <div>
+                                <span>@<%= item.user.handle %></span>
+                                <strong><%= item.user.name %></strong>
+                                
+                            </div>
+                        </div>
+                        <div class="content">
+                            <p><%= item.tweet.text %></p>
+                            <% if (item.tweet.hashtags && item.tweet.hashtags.length > 0) { %>
+                                <p class="hashtags">Hashtags: <%= item.tweet.hashtags.join(', ') %></p>
+                            <% } %>
+                            <% if (item.tweet.mentions && item.tweet.mentions.length > 0) { %>
+                                <p class="mentions">Mentions: <%= item.tweet.mentions.join(', ') %></p>
+                            <% } %>
+                            <% if (item.tweet.mediaUrl) { %>
+                                <div class="media">
+                                    <img src="<%= item.tweet.mediaUrl %>" alt="Tweet Media">
+                                </div>
+                            <% } %>
+                            <div class="like">
+                                <button class="like-button" data-tweetid="<%= item.tweet.tweetid %>">
+                                    <% var isLiked = likedtweets.some(function(likedtweet) { return likedtweet.tweetid === item.tweet.tweetid; }); %>
+                                    <% if (isLiked) { %>
+                                        <span class="filled-heart heart-icon">&#x2665;</span>
+                                    <% } else { %>
+                                        <span class="empty-heart heart-icon">&#x2661;</span>
+                                    <% } %>
+                                </button>
+                                
+                                <span class="like-count">Likes: <%= item.tweet.likesCount || 0 %></span>
+                            </div>
+                        </div>
+                    </div>
+                <% }); %>
+            <% } else { %>
+                <p>No tweets found.</p>
+            <% } %>
+        </div>
+    </div>
+
+    <script>
+        document.querySelectorAll('.like-button').forEach(button => {
+            button.addEventListener('click', async function () {
+                const tweetId = this.getAttribute('data-tweetid');
+
+                // Make a request to the server to handle the like action
+                const response = await fetch(`/tweets/tweet/${tweetId}/like`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ tweetid: tweetId }),
+                });
+
+                if (response.ok) {
+                    const { likesCount, isLiked } = await response.json();
+
+                    // Update the like count in the DOM
+                    document.querySelector(`[data-tweetid="${tweetId}"] .like-count`).innerText = `Likes: ${likesCount}`;
+
+                    // Update the like button image source based on the isLiked status
+                    const imgSrc = `..\images\heart-icon${isLiked ? '-filled' : ''}.png`;
+                    document.querySelector(`[data-tweetid="${tweetId}"] img`).src = imgSrc;
+                } else {
+                    console.error('Failed to handle like action');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

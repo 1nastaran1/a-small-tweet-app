@@ -1,10 +1,71 @@
-<h1>Following</h1>
-<ul>
-<% followings.forEach(function(user){ %>
-    <li> 
-        <h1><%= user.name %> </h1>
-        <p> <%= user.bio %> </p>
-    </li>
-   
-<% }) %>
-</ul>
+<style>
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #fff;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      border-radius: 4px;
+    }
+
+    .modal-dialog-title {
+      font-weight: bold;
+    }
+  
+    h1 {
+      color: #1da1f2;
+      margin-bottom: 10px;
+    }
+  
+    ul {
+      padding: 0;
+      list-style: none;
+    }
+  
+    li {
+      margin-bottom: 20px;
+      padding: 10px;
+      background-color: #f5f8fa;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+  
+    li strong {
+      color: #1da1f2;
+    }
+  
+    li p {
+      margin: 0;
+      color: #333;
+    }
+  
+    form {
+      margin-left: 10px;
+    }
+  
+    button {
+      background-color:#1da1f2;
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      cursor: pointer;
+    }
+  </style>
+
+<body>
+    <div class="container">
+      <h1>followings</h1>
+      <ul>
+        <% followings.forEach(function(user) { %>
+          <li>
+            <div>
+              <strong><%= user.name %></strong>
+              <p><%= user.bio %></p>
+            </div>
+          </li>
+        <% }); %>
+      </ul>
+    </div>
+  </body>
